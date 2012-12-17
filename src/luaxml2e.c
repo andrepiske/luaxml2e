@@ -114,7 +114,13 @@ static luaL_Reg lreg[] = {
 ///////////////////////////////////////////////////////////////////////////////
 
 static int LuaObj_gc(lua_State *L) {
-    // TODO: take account to refcount
+    LuaObj *obj;
+    obj = (LuaObj*)lua_touserdata(L, 1);
+    if (!obj->attached) {
+        obj->freeproc(obj->ptr);
+        obj->attached = 1;
+        obj->ptr = 0;
+    }
     return 0;
 }
 
