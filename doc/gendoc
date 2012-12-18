@@ -1,0 +1,47 @@
+#!/usr/bin/python2
+import markdown
+
+text = open('./doc.md').read()
+html = markdown.markdown(text, ['codehilite', 'fenced_code'],
+    output_format='html5')
+
+hdr = '''
+<!DOCTYPE html>
+<html>
+<head>
+<title>docs</title>
+<link rel="stylesheet" type="text/css" href="colorful.css" media="all">
+<style type="text/css">
+div.codehilite {
+    border: 1px solid #706f6d;
+    background-color: #dbd6c9;
+    padding-left: 12px;
+}
+h1 {
+    font-size: 16pt;
+    background-color: #005fbf;
+    color: white;
+    padding: 5px;
+    margin-top: 75px;
+}
+h2 {
+    font-family: serif;
+    font-size: 14pt;
+    color: #00358c;
+    background-color: #e8e8e8;
+    margin-top: 45px;
+}
+</style>
+</head>
+<body>
+'''
+
+footer = '''
+</body>
+</html>
+'''
+
+open('./doc.html', 'wt').write(hdr + html + footer)
+
+
+

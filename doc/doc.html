@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>docs</title>
+<link rel="stylesheet" type="text/css" href="colorful.css" media="all">
+<style type="text/css">
+div.codehilite {
+    border: 1px solid #706f6d;
+    background-color: #dbd6c9;
+    padding-left: 12px;
+}
+h1 {
+    font-size: 16pt;
+    background-color: #005fbf;
+    color: white;
+    padding: 5px;
+    margin-top: 75px;
+}
+h2 {
+    font-family: serif;
+    font-size: 14pt;
+    color: #00358c;
+    background-color: #e8e8e8;
+    margin-top: 45px;
+}
+</style>
+</head>
+<body>
+<p>This is luaxml2e version 0.1</p>
+<p>Visit <a href="https://github.com/andrepiske/luaxml2e">https://github.com/andrepiske/luaxml2e</a></p>
+<h1>Node</h1>
+<h2>node:addChild(child)</h2>
+<p>Adds <em>child</em> to <em>node</em>. The added child will set as not owned.</p>
+<h2>node:childElementCount()</h2>
+<p>Returns how much nodes that are children of <em>node</em> and are
+of type 'element'.
+The following code does the same:</p>
+<div class="codehilite"><pre><span class="k">function</span> <span class="nf">Node</span><span class="p">:</span><span class="n">childElementCount</span><span class="p">()</span>
+    <span class="kd">local</span> <span class="n">child</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">getFirstChild</span><span class="p">()</span>
+    <span class="kd">local</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">child</span> <span class="o">~=</span> <span class="kc">nil</span> <span class="k">do</span>
+        <span class="k">if</span> <span class="n">child</span><span class="p">:</span><span class="n">getType</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="s">element&#39;</span> <span class="k">then</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">end</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">child</span><span class="p">:</span><span class="n">nextSibling</span><span class="p">()</span>
+    <span class="k">end</span>
+    <span class="k">return</span> <span class="n">n</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<h2>node:copyNode(extended)</h2>
+<p>Returns a copy of <em>node</em>.
+The value of <em>extended</em> is the same of xmlCopyNode of libxml2</p>
+<h2>node:firstElementChild()</h2>
+<p>Returns the first child of <em>node</em> or nil. The returned child
+is owned by its parent.</p>
+<h2>node:getLastChild()</h2>
+<p>Returns the last child of <em>node</em> or nil. The returned child
+is owned by its parent.</p>
+<h2>node:getLineNo()</h2>
+<p>Returns the line number where the tag has been found when
+a file is parsed by luaxml2e.parseDoc()</p>
+<h2>node:getNodePath()</h2>
+<p>Returns the node path.
+The following code will print
+"Mary Jane path is /Foo/Bar/Name[2]"</p>
+<div class="codehilite"><pre><span class="n">XML</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaxml2e&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">parseDoc</span><span class="p">(</span><span class="s">[[</span>
+<span class="s">&lt;?xml version=&quot;1.0&quot; ?&gt;</span>
+<span class="s">&lt;Foo&gt;</span>
+<span class="s">    &lt;Bar&gt;</span>
+<span class="s">        &lt;Name id=&quot;1&quot;&gt;John Doe&lt;/Name&gt;</span>
+<span class="s">        &lt;Name id=&quot;2&quot;&gt;Mary Jane&lt;/Name&gt;</span>
+<span class="s">    &lt;/Bar&gt;</span>
+<span class="s">&lt;/Foo&gt;</span>
+<span class="s">]]</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">bar</span> <span class="o">=</span> <span class="n">doc</span><span class="p">:</span><span class="n">getRoot</span><span class="p">():</span><span class="n">firstElementChild</span><span class="p">()</span>
+<span class="kd">local</span> <span class="n">c</span> <span class="o">=</span> <span class="n">bar</span><span class="p">:</span><span class="n">firstElementChild</span><span class="p">()</span>
+<span class="k">while</span> <span class="n">c</span> <span class="o">~=</span> <span class="kc">nil</span> <span class="k">do</span>
+    <span class="k">if</span> <span class="n">c</span><span class="p">:</span><span class="n">getProp</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">id&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="s">2&#39;</span> <span class="k">then</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Mary Jane path is &#39;</span> <span class="o">..</span> <span class="n">c</span><span class="p">:</span><span class="n">getNodePath</span><span class="p">())</span>
+    <span class="k">end</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="p">:</span><span class="n">nextSibling</span><span class="p">()</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<h2>node:getProp(name)</h2>
+<p>Returns the property value of <em>name</em> or nil.</p>
+<p><strong>Note</strong>: Currently there is no way to handle more than
+one property with the same name.</p>
+<h2>node:hasProp(name)</h2>
+<p>Returns a boolean of whether <em>node</em> has a property
+named <em>name</em>.</p>
+<h2>node:isBlankNode()</h2>
+<p>Returns a boolean of whether <em>node</em> is a blank node.</p>
+<p>The meaning of blank node is the same as in xmlIsBlankNode of libxml2.
+Its documentation says:<br>
+"Checks whether this node is an empty or whitespace only (and possibly ignorable) text-node."</p>
+<h2>node:lastElementChild()</h2>
+<p>Like node:firstElementChild(), but returns the last child.</p>
+<h2>node:newProp(name, value)</h2>
+<p>Adds a property with name <em>name</em> and value <em>value</em> to <em>node</em>.</p>
+<p>Note that there if there exists more than one property with the same name, no
+checks will be made.</p>
+<p>node::setProp() might be more useful.</p>
+<div class="codehilite"><pre><span class="n">XML</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaxml2e&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">newDoc</span><span class="p">(</span><span class="s2">&quot;</span><span class="s">1.0&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">root</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">newNode</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Foo&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">node</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">newNode</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Bar&#39;</span><span class="p">)</span>
+<span class="n">doc</span><span class="p">:</span><span class="n">setRoot</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+<span class="n">root</span><span class="p">:</span><span class="n">addChild</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="n">node</span><span class="p">:</span><span class="n">newProp</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">first&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="s">John&#39;</span><span class="p">)</span>
+<span class="n">node</span><span class="p">:</span><span class="n">newProp</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">last&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="s">Doe&#39;</span><span class="p">)</span>
+<span class="n">node</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">newNode</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Qux&#39;</span><span class="p">)</span>
+<span class="n">root</span><span class="p">:</span><span class="n">addChild</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="n">node</span><span class="p">:</span><span class="n">newProp</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">foo&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="s">Bar&#39;</span><span class="p">)</span>
+<span class="n">node</span><span class="p">:</span><span class="n">newProp</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">foo&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="s">Baz&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span><span class="n">dump</span><span class="p">(</span><span class="kc">true</span><span class="p">))</span>
+</pre></div>
+
+
+<p>The code above will produce the following XML:</p>
+<div class="codehilite"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;Foo&gt;</span>
+  <span class="nt">&lt;Bar</span> <span class="na">first=</span><span class="s">&quot;John&quot;</span> <span class="na">last=</span><span class="s">&quot;Doe&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;Qux</span> <span class="na">foo=</span><span class="s">&quot;Bar&quot;</span> <span class="na">foo=</span><span class="s">&quot;Baz&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/Foo&gt;</span>
+</pre></div>
+
+
+<h2>node:getContent()</h2>
+<p>Gets the text content of a node. For a more detailed explanation how this
+works, see the xmlNodeGetContent of libxml2.</p>
+<p>This function returns a string.</p>
+<p>Here follows an example that outputs "Hello World.":</p>
+<div class="codehilite"><pre><span class="n">XML</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaxml2e&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">parseDoc</span><span class="p">(</span><span class="s">[[</span>
+<span class="s">&lt;?xml version=&quot;1.0&quot; ?&gt;</span>
+<span class="s">&lt;Foo&gt;</span>
+<span class="s">    &lt;Bar&gt;</span>
+<span class="s">        Hello &lt;Baz e=&quot;2.71828&quot;&gt;World&lt;/Baz&gt;.</span>
+<span class="s">    &lt;/Bar&gt;</span>
+<span class="s">&lt;/Foo&gt;</span>
+<span class="s">]]</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span><span class="n">getRoot</span><span class="p">():</span><span class="n">firstElementChild</span><span class="p">():</span><span class="n">getContent</span><span class="p">():</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">^%s*(.-)%s*$&#39;</span><span class="p">))</span>
+</pre></div>
+
+
+<h2>node:isText()</h2>
+<p>Same as node:getType()=='text'.</p>
+<h2>node:setContent(value)</h2>
+<p>Sets the node text content to <em>value</em>.</p>
+<p>For detailed explanation on how this works, look the
+function xmlNodeSetContent of libxml2</p>
+<h2>node::setName(name)</h2>
+<p>Sets the name of <em>node</em> to <em>name</em>.</p>
+<h2>node::removeProp(name)</h2>
+<p>Removes the property with name <em>name</em> from <em>node</em>.</p>
+<h2>node::getName()</h2>
+<p>Returns the <em>node</em> name (its tag name).</p>
+<p>node::getFirstChild()
+Returns the first <em>node</em> child. Note the
+first child may be a node of any type.
+For the first element child the function node::firstElementChild() may be used.</p>
+<h2>node::getParent()</h2>
+<p>Returns the parent node of <em>node</em> or nil. The returned node is owned.</p>
+<h2>node::nextSibling()</h2>
+<p>Returns the next sibling node of <em>node</em> or nil. The returned node is owned.</p>
+<h2>node::prevSibling()</h2>
+<p>Returns the previous sibling node of <em>node</em> or nil. The returned node is owned.</p>
+<h2>node::getDoc()</h2>
+<p>Returns the document associated to <em>node</em> or nil. The returned doc is owned.</p>
+<h2>node::getType()</h2>
+<p>Returns the node type of <em>node</em>.
+This can be one of "element", "attribute", "text", "cdata", "entity-ref",
+"entity", "pi", "comment", "document", "document-type",
+"document-frag", "notation", "html-document", "dtd",
+"element-decl", "attribute-decl", "entity-decl",
+"namespace-decl", "xinclude-start", "xinclude-end" or "docb-document".</p>
+<h1>Doc</h1>
+<h2>doc::copyDoc(recursive)</h2>
+<p>Returns a copy of <em>doc</em>. Further information on how this works may be found
+on function xmlCopyDoc of libxml2.</p>
+<h2>doc::dump([format])</h2>
+<p>Returns the XML string of <em>doc</em>.</p>
+<p>If <em>format</em> is true then the XML string if formatted. This argument
+is optional and false by default.</p>
+<div class="codehilite"><pre><span class="n">XML</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaxml2e&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">newDoc</span><span class="p">()</span>
+<span class="kd">local</span> <span class="n">node</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">newNode</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Bar&#39;</span><span class="p">)</span>
+<span class="n">doc</span><span class="p">:</span><span class="n">setRoot</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span> <span class="k">do</span>
+    <span class="kd">local</span> <span class="n">n</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">newNode</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Foo&#39;</span> <span class="o">..</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">node</span><span class="p">:</span><span class="n">addChild</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">n</span>
+<span class="k">end</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span><span class="n">dump</span><span class="p">(</span><span class="kc">true</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span><span class="n">dump</span><span class="p">())</span>
+</pre></div>
+
+
+<p>The code above will produce the following:</p>
+<div class="codehilite"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;Bar&gt;</span>
+  <span class="nt">&lt;Foo1&gt;</span>
+    <span class="nt">&lt;Foo2&gt;</span>
+      <span class="nt">&lt;Foo3&gt;</span>
+        <span class="nt">&lt;Foo4&gt;</span>
+          <span class="nt">&lt;Foo5/&gt;</span>
+        <span class="nt">&lt;/Foo4&gt;</span>
+      <span class="nt">&lt;/Foo3&gt;</span>
+    <span class="nt">&lt;/Foo2&gt;</span>
+  <span class="nt">&lt;/Foo1&gt;</span>
+<span class="nt">&lt;/Bar&gt;</span>
+
+<span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;Bar&gt;&lt;Foo1&gt;&lt;Foo2&gt;&lt;Foo3&gt;&lt;Foo4&gt;&lt;Foo5/&gt;&lt;/Foo4&gt;&lt;/Foo3&gt;&lt;/Foo2&gt;&lt;/Foo1&gt;&lt;/Bar&gt;</span>
+</pre></div>
+
+
+<h2>doc::setRoot(node)</h2>
+<p>Sets <em>node</em> the root node of <em>doc</em>. This sets <em>node</em> as owned.</p>
+<h2>doc::getRoot()</h2>
+<p>Returns the root <em>node</em> of <em>doc</em> or nil. The result node is owned.</p>
+<h1>luaxml2e</h1>
+<h2>luaxml2e.newDoc([version])</h2>
+<p>Returns a new XML document. The resulting doc is owned.</p>
+<p>The argument <em>version</em> is optional and defaults to "1.0".</p>
+<h2>luaxml2e.newNode(name)</h2>
+<p>Returns a new node with name <em>name</em>. The resulting node is owned.</p>
+<h2>luaxml2e.parseDoc(text)</h2>
+<p>Parses a XML string and returns a document. The resulting
+doc is owned.</p>
+<p><em>text</em> must be a string.</p>
+<p>To parse a XML file you must first read it to a variable,
+this avoids security issues.</p>
+<p>This is one way of reading a XML file:</p>
+<div class="codehilite"><pre><span class="n">XML</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaxml2e&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">io.open</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">foo.xml&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="s">rt&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">parseDoc</span><span class="p">(</span><span class="n">f</span><span class="p">:</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">*all&#39;</span><span class="p">))</span>
+<span class="n">f</span><span class="p">:</span><span class="n">close</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">doc</span> <span class="o">==</span> <span class="kc">nil</span> <span class="k">then</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Oh there, error message has been printed to stderr&#39;</span><span class="p">)</span>
+<span class="k">else</span>
+    <span class="o">...</span> <span class="n">lots</span> <span class="n">of</span> <span class="n">important</span> <span class="n">stuff</span> <span class="n">here</span> <span class="o">...</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<p><span style="font-size: 10pt; font-family: serif;">
+luaxml2e version 0.1-1 as of 2012-12-18
+<br>
+<a href="https://github.com/andrepiske/luaxml2e">https://github.com/andrepiske/luaxml2e</a>
+</span></p>
+</body>
+</html>
