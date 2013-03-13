@@ -37,6 +37,9 @@ int l_node_setcontent(lua_State *L);
 int l_node_setname(lua_State *L);
 int l_node_previouselementsibling(lua_State *L);
 int l_node_removeProp(lua_State *L);
+int l_node_setprop(lua_State *L);
+int l_node_getpropnames(lua_State *L);
+
 int l_node_getname(lua_State *L);
 int l_node_getfirstchild(lua_State *L);
 int l_node_getparent(lua_State *L);
@@ -64,6 +67,8 @@ static luaL_Reg xmlnode_lreg[] = {
     { "setName", l_node_setname },
     { "previousElementSibling", l_node_previouselementsibling },
     { "removeProp", l_node_removeProp },
+    { "setProp", l_node_setprop },
+    { "getPropNames", l_node_getpropnames },
 
     // from properties
     { "getName", l_node_getname },
@@ -411,6 +416,29 @@ int l_node_removeProp(lua_State *L) {
     if (attr)
         xmlRemoveProp(attr);
     return 0;
+}
+
+int l_node_setprop(lua_State *L) {
+    xmlNodePtr node;
+    node = (xmlNodePtr)luaobj_ptr(L, 1);
+    const char *name = luaL_checkstring(L, 2);
+    const char *value = luaL_checkstring(L, 3);
+    xmlSetProp(node, XS(name), XS(value));
+    return 0;
+}
+
+int l_node_getpropnames(lua_State *L) {
+    xmlNodePtr node;
+    xmlAttrPtr attr;
+    int n = 1;
+    node = (xmlNodePtr)luaobj_ptr(L, 1);
+    lua_newtable(L);
+    for (attr = node->properties; attr; attr = attr->next, ++n) {
+        lua_pushnumber(L, (lua_Number)n);
+        lua_pushstring(L, (const char*)attr->name);
+        lua_settable(L, -3);
+    }
+    return 1;
 }
 
 int l_node_getname(lua_State *L) {

@@ -1,5 +1,5 @@
 
-This is luaxml2e version 0.1
+This is luaxml2e version 0.1 rev. 2
 
 Visit <https://github.com/andrepiske/luaxml2e>
 
@@ -111,7 +111,7 @@ Adds a property with name *name* and value *value* to *node*.
 Note that there if there exists more than one property with the same name, no
 checks will be made.
 
-node::setProp() might be more useful.
+node:setProp() might be more useful.
 ~~~~.lua
 XML = require('luaxml2e')
 local doc = XML.newDoc("1.0")
@@ -171,40 +171,48 @@ For detailed explanation on how this works, look the
 function xmlNodeSetContent of libxml2
 
 
-node::setName(name)
+node:setName(name)
 -------------------
 Sets the name of *node* to *name*.
 
-node::removeProp(name)
+node:removeProp(name)
 ---------------------
 Removes the property with name *name* from *node*.
 
-node::getName()
----------------
+node:setProp(name, value)
+-------------------------
+Sets the property with name *name* of *node* to *value*. *value* must not be nil.
+
+node:getPropNames()
+-------------------
+Returns a table (a list) of properties names declared in *node*.
+
+node:getName()
+--------------
 Returns the *node* name (its tag name).
 
-node::getFirstChild()
+node:getFirstChild()
 Returns the first *node* child. Note the
 first child may be a node of any type.
-For the first element child the function node::firstElementChild() may be used.
+For the first element child the function node:firstElementChild() may be used.
 
-node::getParent()
+node:getParent()
 -----------------
 Returns the parent node of *node* or nil. The returned node is owned.
 
-node::nextSibling()
+node:nextSibling()
 -------------------
 Returns the next sibling node of *node* or nil. The returned node is owned.
 
-node::prevSibling()
+node:prevSibling()
 -------------------
 Returns the previous sibling node of *node* or nil. The returned node is owned.
 
-node::getDoc()
+node:getDoc()
 --------------
 Returns the document associated to *node* or nil. The returned doc is owned.
 
-node::getType()
+node:getType()
 ---------------
 Returns the node type of *node*.
 This can be one of "element", "attribute", "text", "cdata", "entity-ref",
@@ -216,12 +224,12 @@ This can be one of "element", "attribute", "text", "cdata", "entity-ref",
 Doc
 ===
 
-doc::copyDoc(recursive)
+doc:copyDoc(recursive)
 -----------------------
 Returns a copy of *doc*. Further information on how this works may be found
 on function xmlCopyDoc of libxml2.
 
-doc::dump([format])
+doc:dump([format])
 -----------------
 Returns the XML string of *doc*.
 
@@ -261,11 +269,11 @@ The code above will produce the following:
 <Bar><Foo1><Foo2><Foo3><Foo4><Foo5/></Foo4></Foo3></Foo2></Foo1></Bar>
 ~~~~
 
-doc::setRoot(node)
+doc:setRoot(node)
 ------------------
 Sets *node* the root node of *doc*. This sets *node* as owned.
 
-doc::getRoot()
+doc:getRoot()
 --------------
 Returns the root *node* of *doc* or nil. The result node is owned.
 
@@ -306,7 +314,7 @@ end
 ~~~~
 
 <span style="font-size: 10pt; font-family: serif;">
-luaxml2e version 0.1-1 as of 2012-12-18
+luaxml2e version 0.1-2 as of 2012-12-18
 <br>
 <https://github.com/andrepiske/luaxml2e>
 </span>

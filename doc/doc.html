@@ -27,7 +27,7 @@ h2 {
 </style>
 </head>
 <body>
-<p>This is luaxml2e version 0.1</p>
+<p>This is luaxml2e version 0.1 rev. 2</p>
 <p>Visit <a href="https://github.com/andrepiske/luaxml2e">https://github.com/andrepiske/luaxml2e</a></p>
 <h1>Node</h1>
 <h2>node:addChild(child)</h2>
@@ -105,7 +105,7 @@ Its documentation says:<br>
 <p>Adds a property with name <em>name</em> and value <em>value</em> to <em>node</em>.</p>
 <p>Note that there if there exists more than one property with the same name, no
 checks will be made.</p>
-<p>node::setProp() might be more useful.</p>
+<p>node:setProp() might be more useful.</p>
 <div class="codehilite"><pre><span class="n">XML</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaxml2e&#39;</span><span class="p">)</span>
 <span class="kd">local</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">newDoc</span><span class="p">(</span><span class="s2">&quot;</span><span class="s">1.0&quot;</span><span class="p">)</span>
 <span class="kd">local</span> <span class="n">root</span> <span class="o">=</span> <span class="n">XML</span><span class="p">.</span><span class="n">newNode</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Foo&#39;</span><span class="p">)</span>
@@ -155,25 +155,29 @@ works, see the xmlNodeGetContent of libxml2.</p>
 <p>Sets the node text content to <em>value</em>.</p>
 <p>For detailed explanation on how this works, look the
 function xmlNodeSetContent of libxml2</p>
-<h2>node::setName(name)</h2>
+<h2>node:setName(name)</h2>
 <p>Sets the name of <em>node</em> to <em>name</em>.</p>
-<h2>node::removeProp(name)</h2>
+<h2>node:removeProp(name)</h2>
 <p>Removes the property with name <em>name</em> from <em>node</em>.</p>
-<h2>node::getName()</h2>
+<h2>node:setProp(name, value)</h2>
+<p>Sets the property with name <em>name</em> of <em>node</em> to <em>value</em>. <em>value</em> must not be nil.</p>
+<h2>node:getPropNames()</h2>
+<p>Returns a table (a list) of properties names declared in <em>node</em>.</p>
+<h2>node:getName()</h2>
 <p>Returns the <em>node</em> name (its tag name).</p>
-<p>node::getFirstChild()
+<p>node:getFirstChild()
 Returns the first <em>node</em> child. Note the
 first child may be a node of any type.
-For the first element child the function node::firstElementChild() may be used.</p>
-<h2>node::getParent()</h2>
+For the first element child the function node:firstElementChild() may be used.</p>
+<h2>node:getParent()</h2>
 <p>Returns the parent node of <em>node</em> or nil. The returned node is owned.</p>
-<h2>node::nextSibling()</h2>
+<h2>node:nextSibling()</h2>
 <p>Returns the next sibling node of <em>node</em> or nil. The returned node is owned.</p>
-<h2>node::prevSibling()</h2>
+<h2>node:prevSibling()</h2>
 <p>Returns the previous sibling node of <em>node</em> or nil. The returned node is owned.</p>
-<h2>node::getDoc()</h2>
+<h2>node:getDoc()</h2>
 <p>Returns the document associated to <em>node</em> or nil. The returned doc is owned.</p>
-<h2>node::getType()</h2>
+<h2>node:getType()</h2>
 <p>Returns the node type of <em>node</em>.
 This can be one of "element", "attribute", "text", "cdata", "entity-ref",
 "entity", "pi", "comment", "document", "document-type",
@@ -181,10 +185,10 @@ This can be one of "element", "attribute", "text", "cdata", "entity-ref",
 "element-decl", "attribute-decl", "entity-decl",
 "namespace-decl", "xinclude-start", "xinclude-end" or "docb-document".</p>
 <h1>Doc</h1>
-<h2>doc::copyDoc(recursive)</h2>
+<h2>doc:copyDoc(recursive)</h2>
 <p>Returns a copy of <em>doc</em>. Further information on how this works may be found
 on function xmlCopyDoc of libxml2.</p>
-<h2>doc::dump([format])</h2>
+<h2>doc:dump([format])</h2>
 <p>Returns the XML string of <em>doc</em>.</p>
 <p>If <em>format</em> is true then the XML string if formatted. This argument
 is optional and false by default.</p>
@@ -221,9 +225,9 @@ is optional and false by default.</p>
 </pre></div>
 
 
-<h2>doc::setRoot(node)</h2>
+<h2>doc:setRoot(node)</h2>
 <p>Sets <em>node</em> the root node of <em>doc</em>. This sets <em>node</em> as owned.</p>
-<h2>doc::getRoot()</h2>
+<h2>doc:getRoot()</h2>
 <p>Returns the root <em>node</em> of <em>doc</em> or nil. The result node is owned.</p>
 <h1>luaxml2e</h1>
 <h2>luaxml2e.newDoc([version])</h2>
@@ -251,7 +255,7 @@ this avoids security issues.</p>
 
 
 <p><span style="font-size: 10pt; font-family: serif;">
-luaxml2e version 0.1-1 as of 2012-12-18
+luaxml2e version 0.1-2 as of 2012-12-18
 <br>
 <a href="https://github.com/andrepiske/luaxml2e">https://github.com/andrepiske/luaxml2e</a>
 </span></p>

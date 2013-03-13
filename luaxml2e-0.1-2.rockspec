@@ -1,6 +1,6 @@
 
 package = "luaxml2e"
-version = "0.1-1"
+version = "0.1-2"
 
 source = {
     url = "http://...", -- create one...
@@ -16,7 +16,7 @@ description = {
 }
 
 dependencies = {
-    "lua >= 5.1",
+    "lua == 5.1",
 }
 
 build = {
@@ -28,6 +28,7 @@ build = {
             libraries = { "xml2", "lua5.1", "m" },
             incdirs = { "/usr/include/libxml2" },
         },
+        luaxml2es = "src/luaxml2es.lua",
     },
 
 }
