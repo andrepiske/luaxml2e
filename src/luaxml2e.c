@@ -6,6 +6,10 @@
 #include <lauxlib.h>
 #include <string.h>
 
+#if LUA_VERSION_NUM != 501
+#error("Invalid lua version: MUST be 5.1")
+#endif
+
 #define XS(a) ((xmlChar*)(a))
 
 typedef void(*LuaObj_freeproc)(void*);

@@ -20,17 +20,17 @@ local function mt_index(self, key)
     local t = getmetatable(self)
     local r = t[key]
     if r == nil then
-        r = t.props[key](self)
+        r = t._props[key](self)
     end
     return r
 end
 
 local function property(d, name, proc)
-    d.props[name] = proc
+    d._props[name] = proc
 end
 
-local doc_mt = { ['props']={}, ['__index']=mt_index }
-local node_mt = { ['props']={}, ['__index']=mt_index }
+local doc_mt = { ['_props']={}, ['__index']=mt_index }
+local node_mt = { ['_props']={}, ['__index']=mt_index }
 
 local wrapdoc = function(obj) return wrapobj(obj, doc_mt) end
 local wrapnode = function(obj) return wrapobj(obj, node_mt) end

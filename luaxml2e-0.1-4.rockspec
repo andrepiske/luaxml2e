@@ -1,6 +1,6 @@
 
 package = "luaxml2e"
-version = "0.1-3"
+version = "0.1-4"
 
 source = {
     url = "https://github.com/andrepiske/luaxml2e/"
@@ -11,7 +11,7 @@ description = {
     detailed = [[
         A binding of the libxml2 tree for lua.
     ]] ,
-    homepage = "",
+    homepage = "https://github.com/andrepiske/luaxml2e/",
     license = "MIT",
 }
 
